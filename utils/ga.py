@@ -129,7 +129,6 @@ class GA():
         best_index = np.argmax(self.fitness_array)
         self.genome.best = self.genome[best_index]
         self.best_fitness = self.fitness_array[best_index]
-        self.average_fitness = self.fitness_array.mean()
 
     def replace(self):
         """ 使用前代最佳替换本代最差 """
@@ -152,6 +151,7 @@ class GA():
             if self.fitness_array[np.argmax(self.fitness_array)] > self.best_fitness:
                 self.replace()
                 self.update_records()
+            self.average_fitness = self.fitness_array.mean()
 
             if log:
                 print('{} Best: {}, Average: {}'.format(
