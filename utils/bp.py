@@ -1,7 +1,5 @@
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
-import copy
 
 def batch_loader(x, y, batch_size=64):
     data_size = x.shape[0]

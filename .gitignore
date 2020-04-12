@@ -132,3 +132,6 @@ draft/
 .ipynb_checkpoints
 .idea
 .DS_Store
+
+# Test files
+test.ipynb
