@@ -1,14 +1,37 @@
 import numpy as np
 import torch
 
+
 def batch_loader(x, y, batch_size=64):
+    """ Mini-batch 生成器
+
+    Args:
+        x: 训练数据 Tensor or ndarray
+        y: 训练数据标签 Tensor or ndarray
+        batch_size: Mini-batch 大小
+
+    Returns:
+        x_batch, y_batch: mini-batch 数据对
+    """
     data_size = x.shape[0]
     permutation = np.random.permutation(data_size)
     for i in range(0, data_size, batch_size):
         batch_permutation = permutation[i: i+batch_size]
         yield x[batch_permutation], y[batch_permutation]
 
+
 def train_model(model, x, y, num_epoches=10000, batch_size=4096, learning_rate=1e-3, log=True):
+    """ 训练模型
+
+    Args:
+        model: 待训练的 Pytorch Model
+        x: 训练数据 Tensor
+        y: 训练数据标签 Tensor
+        num_epoches: 训练迭代次数
+        batch_size: mini-batch 大小
+        learning_rate: 训练学习率
+        log: 是否输出记录
+    """
     loss_fn = torch.nn.MSELoss(reduction='mean')
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
@@ -32,10 +55,17 @@ def train_model(model, x, y, num_epoches=10000, batch_size=4096, learning_rate=1
             ))
     return np.mean(loss_recorder)
 
+
 def reset_model(model):
+    """ 重置模型参数
+
+    Args:
+        model: Pytorch Model
+    """
     for layer in model:
         if hasattr(layer, 'reset_parameters'):
             layer.reset_parameters()
+
 
 if __name__ == '__main__':
 
@@ -46,7 +76,8 @@ if __name__ == '__main__':
     X_BOUND = [-10, 10]
     data_length = 1000
     noise = 0.1
-    x_origin = X_BOUND[0] + (X_BOUND[1]-X_BOUND[0]) * np.random.rand(data_length)
+    x_origin = X_BOUND[0] + (X_BOUND[1]-X_BOUND[0]) * \
+        np.random.rand(data_length)
     y_origin = F(x_origin) + noise * np.random.rand(data_length)
 
     # Build Model
@@ -66,5 +97,6 @@ if __name__ == '__main__':
     # Plot
     x_axis = np.linspace(*X_BOUND, 200)
     plt.plot(x_axis, F(x_axis))
-    plt.scatter(x_origin, np.squeeze(model(x_tensor).detach().cpu().numpy(), -1), color='r')
+    plt.scatter(x_origin, np.squeeze(
+        model(x_tensor).detach().cpu().numpy(), -1), color='r')
     plt.show()
