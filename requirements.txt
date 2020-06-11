@@ -1,2 +1,2 @@
-numpy==1.18.1
+numpy==1.18.5
 pytorch==1.4.0
